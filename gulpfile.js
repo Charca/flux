@@ -1,12 +1,21 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
-var concat = require('concat');
+var browserSync = require('browser-sync');
+var concat = require('gulp-concat');
 
 gulp.task('browserify', function() {
   gulp.src('src/js/main.js')
     .pipe(browserify({transform: 'reactify'}))
     .pipe(concat('main.js'))
     .pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('browser-sync', function() {
+  browserSync.init(['dist/**'], {
+    server: {
+      baseDir: ['dist', 'src']
+    }
+  });
 });
 
 gulp.task('copy', function() {
@@ -16,6 +25,6 @@ gulp.task('copy', function() {
 
 gulp.task('default', ['browserify', 'copy']);
 
-gulp.task('watch', function() {
+gulp.task('watch', ['browser-sync'], function() {
   gulp.watch('src/**/*.*', ['default']);
 });
