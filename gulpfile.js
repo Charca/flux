@@ -10,10 +10,10 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync', ['build'], function() {
   browserSync.init(['dist/**'], {
     server: {
-      baseDir: ['dist', 'src']
+      baseDir: ['dist']
     }
   });
 });
@@ -23,8 +23,11 @@ gulp.task('copy', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', ['browserify', 'copy']);
-
 gulp.task('watch', ['browser-sync'], function() {
-  gulp.watch('src/**/*.*', ['default']);
+  gulp.watch('src/**/*.*', ['build']);
 });
+
+gulp.task('default', ['watch']);
+
+gulp.task('build', ['browserify', 'copy']);
+
